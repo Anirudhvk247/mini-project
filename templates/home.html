@@ -3,90 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plant Disease Recognition</title>
+    <title>PHASAL | 3D Plant Analytics</title>
+    <!-- Add FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../static/images/logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <!-- 3D Environment Background -->
+    <div class="scene-3d">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">
-            <img src="../static/images/logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
-            PHASAL
-          </a>
-          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-              </li>
-            </ul>
-          </div> -->
+            <a class="navbar-brand" href="/">
+                <img src="../static/images/logo.svg" alt="Phasal Logo" width="32" height="32" style="filter: brightness(0) invert(1);">
+                PHASAL
+            </a>
         </div>
-      </nav>
-      <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner " >
-            <div class="carousel-item active">
-              <div class="carousel-text-wrapper">
-                <h1 class="carousel-text-title">Plant Disease Recognition</h1>
-                <div class="form-box">
-                  <form action="/upload/" method = "POST" enctype="multipart/form-data">
-                    <h1>Upload Image</h1>
-                    <div class="input-box d-flex">
-                      <input type="file"  accept="image/png, image/jpeg"  name="img" required>
-                    </div>
-                    <div class="input-box d-flex">
-                      <button type="submit" class="btn btn-success m-auto">Upload</button>
-                    </div>
-                  </form>
-                  {% if result %}
-                  <div class="result-container">
-                    <div class="result-box">
-                      <div class="result-img-container">
-                        <!-- <img src="../static/images/Apple_tree_leaf.jpg" alt="uploaded image" class="result-image"> -->
-                        <img src="{{imagepath}}" alt="uploaded image" class="result-image">
-                      </div>
-                      <div class="result-text">
-                        <h3>                   
-                          {{prediction['name']}}
-                        </h3>
-                        <p>
-                          {{prediction['cause']}}
-                        </p>
-                        <p>
-                          {{prediction['cure']}}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                {% endif %}
+    </nav>
+
+    <main class="main-wrapper">
+        
+        {% if not result %}
+        <!-- 3D Hero Section -->
+        <section class="hero-3d">
+            <h1>Diagnose with Precision</h1>
+            <p>Upload a high-resolution leaf image and let our neural network perform an instant, deeply accurate health analysis.</p>
+        </section>
+
+        <!-- 3D Glass Upload Panel -->
+        <div class="glass-panel-3d" id="tiltPanel">
+            <form action="/upload/" method="POST" enctype="multipart/form-data">
+                <h2 class="upload-title">Initialize Scan</h2>
+                
+                <div class="file-drop-area">
+                    <input type="file" accept="image/png, image/jpeg, image/jpg" name="img" id="fileInput" required>
+                    <i class="fa-solid fa-cloud-arrow-up icon-3d"></i>
+                    <span class="file-text" id="fileText">Tap or drag an image here</span>
+                </div>
+
+                <button type="submit" class="btn-scan" id="scanBtn">
+                    Execute Analysis <i class="fa-solid fa-microchip" style="margin-left:8px;"></i>
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+        {% if result %}
+        <!-- 3D Result View -->
+        <div class="result-wrapper-3d">
+            <a href="/" class="action-back">
+                <i class="fa-solid fa-arrow-left"></i> Run Another Scan
+            </a>
+            
+            <div class="result-card-3d">
+                <div class="result-image-box">
+                    <img src="{{ imagepath }}" alt="Detected Leaf">
                 </div>
                 
-                
-                <!-- <div class="m-auto text-center">
-                  <h1>फसल karo Hustle नहीं</h1>
-                  <h3 class="hero-subhead">Lorem ipsum dolor sit amet, consectetur adipiscing elit,</h3>
-                </div> -->
-              </div>
-              
+                <div class="result-details-3d">
+                    <div class="badge-wrapper">
+                        <span class="result-badge">Analysis Complete</span>
+                    </div>
+                    
+                    <h2 class="result-name">{{ prediction['name'] }}</h2>
+                    
+                    <div class="info-block">
+                        <h4><i class="fa-solid fa-virus" style="margin-right: 5px;"></i> Etiology (Cause)</h4>
+                        <p>{{ prediction['cause'] }}</p>
+                    </div>
+                    
+                    <div class="info-block">
+                        <h4><i class="fa-solid fa-flask" style="margin-right: 5px;"></i> Treatment Protocol</h4>
+                        <p>{{ prediction['cure'] }}</p>
+                    </div>
+                </div>
             </div>
-           
         </div>
-       
-        </div>
-      </div>
-      <script src="../static/js/bootstrap.bundle.min.js"></script>
+        {% endif %}
+
+    </main>
+
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Interactive 3D Tilt Effect based on mouse movement
+        const panel = document.getElementById('tiltPanel');
+        
+        if(panel) {
+            document.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+                // Add base rotation to make it pop naturally
+                panel.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateZ(30px)`;
+            });
+
+            // Reset transform on mouse leave window
+            document.addEventListener('mouseleave', () => {
+                panel.style.transform = `rotateX(10deg) rotateY(-5deg) translateZ(0)`;
+            });
+        }
+
+        // File Input UI Update
+        const fileInput = document.getElementById('fileInput');
+        const fileText = document.getElementById('fileText');
+        
+        fileInput?.addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                fileText.innerHTML = `Asset locked: <strong style="color:var(--text-primary)">${fileName}</strong>`;
+            }
+        });
+
+        // Add loading state to button
+        const form = document.querySelector('form');
+        const btn = document.getElementById('scanBtn');
+        form?.addEventListener('submit', () => {
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...`;
+            btn.style.opacity = '0.8';
+        });
+    </script>
 </body>
 </html>
