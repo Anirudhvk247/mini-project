@@ -55,3 +55,27 @@ To use this project, you need to download a pre-trained model from the given Goo
 
 3. **Access the Application**
    - Once the server is running, follow the instructions displayed in the terminal to access the application in your web browser.
+## Important Notes
+
+### Model File
+The trained TensorFlow model (`.keras` file) is not included in the repository because GitHub has a 100 MB file size limit.
+
+To run the project:
+1. Download the trained model file.
+2. Place it inside the `models/` folder.
+
+Example structure:
+
+mini-project/
+│
+├── app.py
+├── models/
+│   └── plant_disease_recog_model_pwp.keras
+├── templates/
+├── static/
+└── uploadimages/
+
+### Uploaded Images
+The `uploadimages/` folder stores temporary images uploaded by users for prediction.
+
+These files are ignored in Git (`.gitignore`) because they are generated during runtime and should not be stored in the repository.
